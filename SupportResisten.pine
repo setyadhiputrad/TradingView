@@ -1,0 +1,60 @@
+//@version=4
+study( 
+     title='SupRes[tytyd]',
+     shorttitle='SR', 
+     overlay=true
+     )
+
+use_alt_series = input(defval=false, title='Alternative source?')
+alt_src = input(defval=close, title='Alternative source:')
+h = use_alt_series ? alt_src : high
+l = use_alt_series ? alt_src : low
+
+window1 = input(defval=8, title='lookback window 1:', type=input.integer)
+window2 = input(defval=21, title='lookback window 2:', type=input.integer)
+percent_of_range_for_trade_zone = input(defval=25.0, title='Percent of the range to use for trade zone', type=input.float) * 0.01
+
+short_term_top = valuewhen(h >= highest(h, window1), h, 0)
+short_term_bot = valuewhen(l <= lowest(l, window1), l, 0)
+long_term_top = valuewhen(h >= highest(h, window2), h, 0)
+long_term_bot = valuewhen(l <= lowest(l, window2), l, 0)
+
+short_term_resist = change(short_term_top) != 0 ? na : short_term_top
+short_term_suport = change(short_term_bot) != 0 ? na : short_term_bot
+
+long_term_resist = change(long_term_top) != 0 ? na : long_term_top
+long_term_suport = change(long_term_bot) != 0 ? na : long_term_bot
+
+long_term_resist_marker = change(fixnan(long_term_resist)) != 0 ? long_term_resist : na
+long_term_suport_marker = change(fixnan(long_term_suport)) != 0 ? long_term_suport : na
+
+short_term_resist_plot = plot(series=short_term_resist, title='STR', color=color.navy, linewidth=1, style=plot.style_linebr, transp=0)
+short_term_suport_plot = plot(series=short_term_suport, title='STS', color=color.navy, linewidth=1, style=plot.style_linebr, transp=0)
+long_term_resist_plot = plot(series=long_term_resist, title='LTR', color=color.blue, linewidth=4, style=plot.style_linebr, transp=70)
+long_term_suport_plot = plot(series=long_term_suport, title='LTS', color=color.blue, linewidth=4, style=plot.style_linebr, transp=70)
+long_term_resist_marker_plot = plot(series=long_term_resist_marker, title='.R', color=color.blue, linewidth=4, style=plot.style_circles, transp=0)
+long_term_suport_marker_plot = plot(series=long_term_suport_marker, title='.S', color=color.blue, linewidth=4, style=plot.style_circles, transp=0)
+
+fill(short_term_resist_plot, long_term_resist_plot, color=color.orange, transp=80, title="Resistance")
+fill(short_term_suport_plot, long_term_suport_plot, color=color.olive, transp=80, title="Support")
+
+//  Calculate entry zone:
+float short_term_resist_trade_limit = na
+float short_term_suport_trade_limit = na
+
+range = fixnan(short_term_resist) - fixnan(short_term_suport)
+
+if not na(short_term_resist)
+    if not na(short_term_resist_trade_limit[1])
+        short_term_resist_trade_limit := short_term_resist_trade_limit[1]
+    else
+        short_term_resist_trade_limit := short_term_resist - range * percent_of_range_for_trade_zone
+
+if not na(short_term_suport)
+    if not na(short_term_suport_trade_limit[1])
+        short_term_suport_trade_limit := short_term_suport_trade_limit[1]
+    else
+        short_term_suport_trade_limit := short_term_suport + range * percent_of_range_for_trade_zone
+
+short_term_resist_trade_limit_plot = plot(series=short_term_resist_trade_limit, title='', color=color.red, linewidth=1, style=plot.style_linebr, transp=0)
+short_term_suport_trade_limit_plot = plot(series=short_term_suport_trade_limit, title='', color=color.lime, linewidth=1, style=plot.style_linebr, transp=0)
