@@ -19,6 +19,7 @@ hist_colorChange = input(true,title="MacD Histogram 4 Colors?")
 
 res = useCurrentRes ? period : resCustom
 
+//MACD Core
 fastLength = input(12, minval=1), slowLength=input(26,minval=1)
 signalLength=input(9,minval=1)
 
@@ -48,8 +49,11 @@ signal_color = macd_colorChange ? macd_IsAbove ? yellow : yellow : lime
 
 circleYPosition = outSignal
  
-plot(smd and outMacD ? outMacD : na, title="MACD", color=macd_color, linewidth=4)
-plot(smd and outSignal ? outSignal : na, title="Signal Line", color=signal_color, style=line ,linewidth=2)
-plot(sh and outHist ? outHist : na, title="Histogram", color=plot_color, style=histogram, linewidth=4)
+plot(smd and outMacD ? outMacD : na, title="MACD", color=macd_color, linewidth=1)
+plot(smd and outSignal ? outSignal : na, title="Signal Line", color=signal_color, style=line ,linewidth=1)
+plot(sh and outHist ? outHist : na, title="Histogram", color=plot_color, style=histogram, linewidth=2)
+//---------------------//
 plot(sd and cross(outMacD, outSignal) ? circleYPosition : na, title="Cross", style=circles, linewidth=4, color=macd_color)
-hline(0, '0 Line', linestyle=solid, linewidth=2, color=white)
+outPutSignal = outSignal >= outMacD ? 1 : 0
+bgcolor(outPutSignal>0?red:lime, transp=85) 
+hline(0, '0 Line', linestyle=solid, linewidth=1, color=white)
