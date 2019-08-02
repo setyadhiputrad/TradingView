@@ -1,0 +1,38 @@
+//@version4
+study(
+    title='MultiSMA[tytyd]',
+    shorttitle='SMA',
+    overlay=true
+)
+
+//sma 20
+lenght20 = input(20, minval=1, title="20")
+source20 = input(close, title="20")
+out20 = sma(source20, lenght20)
+//sma50
+lenght50 = input(50, minval=1, title="50")
+source50 = input(close, title="50")
+out50 = sma(source50, lenght50)
+//sma100
+lenght100 = input(100, minval=1, title="100")
+source100 = input(close, title="100")
+out100 = sma(source100, lenght100)
+//sma200
+lenght200 = input(200, minval=1, title="200")
+source200 = input(close, title="200")
+out200 = sma(source200, lenght200)
+
+//Color Definitions
+crosssma_20_50 = out20 >= out50
+crosssma_20_100 = out20 >= out100 
+crosssma_20_200 = out20 >= out200
+sma_color = crosssma ? color.lime : color.red
+
+//Plot MA
+plot(out20, title="20", color=sma_color, linewidth = 4, style=line)
+plot(out50, title="50", color=close >= out50 ? green : red, linewidth = 3, style=line)
+plot(out100, title="100", color=close >= out100 ? green : red, linewidth = 2, style=line)
+plot(out200, title="200", color=close >= out200 ? green : red, linewidth = 1, style=line)
+plot(cross(out20, out50) ? out20 : na, color=color.orange, transp=0, style = plot.style_circles, linewidth = 4)
+
+//
