@@ -1,5 +1,13 @@
 //@version=3
-strategy(title='[STRATEGY][RS]Open Session Breakout Trader', shorttitle='S', overlay=true, default_qty_type=strategy.cash, default_qty_value=1000, initial_capital=100000, currency=currency.USD)
+strategy(
+    title='[STRATEGY]Session Breakout', 
+    shorttitle='SB', 
+    overlay=true, 
+    default_qty_type=strategy.cash, 
+    default_qty_value=1000, 
+    initial_capital=100000, 
+    currency=currency.USD
+)
 
 //  ||--------------------------------------------------||
 //  ||  Effective Trading Session:
