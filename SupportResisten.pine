@@ -1,9 +1,9 @@
 //@version=4
-study( 
-     title='SupRes[tytyd]',
-     shorttitle='SR', 
-     overlay=true
-     )
+study(
+    title='SupRes[tytyd]',
+    shorttitle='SR', 
+    overlay=true
+)
 
 use_alt_series = input(defval=false, title='Alternative source?')
 alt_src = input(defval=close, title='Alternative source:')
